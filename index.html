@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora com Explicações</title>
+    <title>Calculadora Completa + Regra de Três</title>
     <style>
         * {
             box-sizing: border-box;
@@ -22,13 +22,145 @@
         
         .container {
             display: flex;
-            gap: 25px;
-            max-width: 1100px;
+            flex-direction: column;
+            max-width: 1400px;
             width: 100%;
+            gap: 25px;
+        }
+        
+        /* REGRA DE TRÊS - EM CIMA */
+        .regra-tres-container {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            border: 3px solid #3498db;
+        }
+        
+        .regra-tres-titulo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .regra-tres-titulo h2 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .badge {
+            background: #3498db;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .regra-tres-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .regra-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid;
+        }
+        
+        .regra-card.direta {
+            border-left-color: #27ae60;
+        }
+        
+        .regra-card.inversa {
+            border-left-color: #e67e22;
+        }
+        
+        .regra-tipo {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .regra-tipo.direta {
+            color: #27ae60;
+        }
+        
+        .regra-tipo.inversa {
+            color: #e67e22;
+        }
+        
+        .regra-explicacao {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .regra-formula {
+            font-family: 'Courier New', monospace;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .regra-exemplo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
             flex-wrap: wrap;
         }
         
-        /* Calculadora - Lado Esquerdo */
+        .exemplo-item {
+            background: #ecf0f1;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .seta {
+            font-size: 30px;
+            color: #3498db;
+        }
+        
+        /* LINHA DIVISÓRIA */
+        .divisoria {
+            text-align: center;
+            position: relative;
+            margin: 10px 0;
+        }
+        
+        .divisoria span {
+            background: white;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            color: #2c3e50;
+            border: 2px solid #3498db;
+        }
+        
+        /* CALCULADORA E EXPLICAÇÕES */
+        .conteudo-inferior {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
         .calculadora {
             flex: 1;
             min-width: 320px;
@@ -124,7 +256,6 @@
             background: #7f8c8d;
         }
         
-        /* Painel de Explicações - Lado Direito */
         .explicacoes {
             flex: 1;
             min-width: 300px;
@@ -141,22 +272,12 @@
             padding-bottom: 10px;
         }
         
-        .explicacoes h3 {
-            color: #34495e;
-            margin: 20px 0 10px 0;
-        }
-        
         .card-conta {
             background: #f8f9fa;
             border-left: 5px solid #3498db;
             padding: 15px;
             margin: 15px 0;
             border-radius: 8px;
-        }
-        
-        .card-conta p {
-            margin: 5px 0;
-            font-size: 16px;
         }
         
         .conta-destaque {
@@ -170,14 +291,6 @@
             font-size: 20px;
             color: #27ae60;
             font-weight: bold;
-        }
-        
-        .explicacao-texto {
-            background: #e8f4fc;
-            padding: 15px;
-            border-radius: 8px;
-            line-height: 1.6;
-            margin-top: 20px;
         }
         
         .lista-funcionalidades {
@@ -211,93 +324,198 @@
             border-radius: 8px;
             margin-top: 20px;
         }
+
+        .seta-indicador {
+            font-size: 24px;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .indicador-direta {
+            color: #27ae60;
+        }
+
+        .indicador-inversa {
+            color: #e67e22;
+            transform: rotate(180deg);
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- CALCULADORA - LADO ESQUERDO -->
-        <div class="calculadora">
-            <div class="display" id="display">0</div>
+        <!-- REGRA DE TRÊS - EM CIMA -->
+        <div class="regra-tres-container">
+            <div class="regra-tres-titulo">
+                <h2>📐 REGRA DE TRÊS</h2>
+                <span class="badge">Direta e Inversa</span>
+            </div>
             
-            <div class="botoes">
-                <button class="btn btn-limpar" onclick="limparTudo()">C</button>
-                <button class="btn btn-operador" onclick="inserir('(')">(</button>
-                <button class="btn btn-operador" onclick="inserir(')')">)</button>
-                <button class="btn btn-operador" onclick="inserir('/')">÷</button>
+            <div class="regra-tres-grid">
+                <!-- REGRA DE TRÊS DIRETA -->
+                <div class="regra-card direta">
+                    <div class="regra-tipo direta">
+                        <span>⬆️ REGRA DE TRÊS DIRETA ⬆️</span>
+                    </div>
+                    
+                    <div class="regra-explicacao">
+                        <p><strong>📌 Quando usar:</strong> Quando duas grandezas aumentam ou diminuem na mesma proporção.</p>
+                        <p><em>Exemplo: Se 5 metros de tecido custam R$ 20, quanto custam 8 metros?</em></p>
+                    </div>
+                    
+                    <div class="regra-formula">
+                        5 m → R$ 20<br>
+                        8 m → R$ x<br>
+                        <span style="color: #27ae60;">x = (8 × 20) ÷ 5</span>
+                    </div>
+                    
+                    <div class="regra-exemplo">
+                        <div class="exemplo-item">
+                            <strong>Mais metros</strong> ⬆️<br>
+                            <span style="color: #27ae60;">Mais preço</span> ⬆️
+                        </div>
+                        <div class="seta">➡️</div>
+                        <div class="exemplo-item">
+                            <strong>Multiplica cruzado</strong><br>
+                            <span style="font-family: monospace;">8 × 20 = 160</span>
+                        </div>
+                        <div class="seta">➡️</div>
+                        <div class="exemplo-item">
+                            <strong>Divide pelo outro</strong><br>
+                            <span style="font-family: monospace;">160 ÷ 5 = 32</span>
+                        </div>
+                    </div>
+                </div>
                 
-                <button class="btn btn-numero" onclick="inserir('7')">7</button>
-                <button class="btn btn-numero" onclick="inserir('8')">8</button>
-                <button class="btn btn-numero" onclick="inserir('9')">9</button>
-                <button class="btn btn-operador" onclick="inserir('*')">×</button>
-                
-                <button class="btn btn-numero" onclick="inserir('4')">4</button>
-                <button class="btn btn-numero" onclick="inserir('5')">5</button>
-                <button class="btn btn-numero" onclick="inserir('6')">6</button>
-                <button class="btn btn-operador" onclick="inserir('-')">−</button>
-                
-                <button class="btn btn-numero" onclick="inserir('1')">1</button>
-                <button class="btn btn-numero" onclick="inserir('2')">2</button>
-                <button class="btn btn-numero" onclick="inserir('3')">3</button>
-                <button class="btn btn-operador" onclick="inserir('+')">+</button>
-                
-                <button class="btn btn-numero" onclick="inserir('0')">0</button>
-                <button class="btn btn-numero" onclick="inserir('.')">.</button>
-                <button class="btn btn-igual" onclick="calcular()">=</button>
-                <button class="btn btn-backspace" onclick="apagarUltimo()">⌫</button>
+                <!-- REGRA DE TRÊS INVERSA -->
+                <div class="regra-card inversa">
+                    <div class="regra-tipo inversa">
+                        <span>⬇️ REGRA DE TRÊS INVERSA ⬇️</span>
+                    </div>
+                    
+                    <div class="regra-explicacao">
+                        <p><strong>📌 Quando usar:</strong> Quando uma grandeza aumenta e a outra diminui na mesma proporção.</p>
+                        <p><em>Exemplo: 5 pedreiros fazem um muro em 12 dias. Quantos dias levam 8 pedreiros?</em></p>
+                    </div>
+                    
+                    <div class="regra-formula">
+                        5 pedreiros → 12 dias<br>
+                        8 pedreiros → x dias<br>
+                        <span style="color: #e67e22;">x = (5 × 12) ÷ 8</span>
+                    </div>
+                    
+                    <div class="regra-exemplo">
+                        <div class="exemplo-item">
+                            <strong>Mais pedreiros</strong> ⬆️<br>
+                            <span style="color: #e67e22;">Menos dias</span> ⬇️
+                        </div>
+                        <div class="seta">➡️</div>
+                        <div class="exemplo-item">
+                            <strong>Multiplica reto</strong><br>
+                            <span style="font-family: monospace;">5 × 12 = 60</span>
+                        </div>
+                        <div class="seta">➡️</div>
+                        <div class="exemplo-item">
+                            <strong>Divide pelo outro</strong><br>
+                            <span style="font-family: monospace;">60 ÷ 8 = 7,5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DICA IMPORTANTE REGRA DE TRÊS -->
+            <div style="display: flex; gap: 15px; margin-top: 20px; padding: 15px; background: #e8f4fc; border-radius: 10px;">
+                <div style="flex: 1; text-align: center;">
+                    <span style="font-size: 24px;">🔍</span>
+                    <p><strong>DIRETA:</strong> Multiplica cruzado</p>
+                    <p>⬆️ com ⬆️ ou ⬇️ com ⬇️</p>
+                </div>
+                <div style="width: 2px; background: #3498db;"></div>
+                <div style="flex: 1; text-align: center;">
+                    <span style="font-size: 24px;">🔄</span>
+                    <p><strong>INVERSA:</strong> Multiplica reto</p>
+                    <p>⬆️ com ⬇️ ou ⬇️ com ⬆️</p>
+                </div>
             </div>
         </div>
         
-        <!-- EXPLICAÇÕES - LADO DIREITO -->
-        <div class="explicacoes">
-            <h2>📘 Aprenda Matemática</h2>
-            
-            <h3>📊 Exemplos de Contas:</h3>
-            
-            <div class="card-conta">
-                <p class="conta-destaque">2 + 3 × 4</p>
-                <p>Primeiro multiplicação: 3 × 4 = 12</p>
-                <p>Depois adição: 2 + 12 = <span class="resultado-destaque">14</span></p>
+        <!-- LINHA DIVISÓRIA -->
+        <div class="divisoria">
+            <span>⬇️ CALCULADORA E EXPLICAÇÕES ⬇️</span>
+        </div>
+        
+        <!-- CONTEÚDO INFERIOR: CALCULADORA + EXPLICAÇÕES -->
+        <div class="conteudo-inferior">
+            <!-- CALCULADORA - LADO ESQUERDO -->
+            <div class="calculadora">
+                <div class="display" id="display">0</div>
+                
+                <div class="botoes">
+                    <button class="btn btn-limpar" onclick="limparTudo()">C</button>
+                    <button class="btn btn-operador" onclick="inserir('(')">(</button>
+                    <button class="btn btn-operador" onclick="inserir(')')">)</button>
+                    <button class="btn btn-operador" onclick="inserir('/')">÷</button>
+                    
+                    <button class="btn btn-numero" onclick="inserir('7')">7</button>
+                    <button class="btn btn-numero" onclick="inserir('8')">8</button>
+                    <button class="btn btn-numero" onclick="inserir('9')">9</button>
+                    <button class="btn btn-operador" onclick="inserir('*')">×</button>
+                    
+                    <button class="btn btn-numero" onclick="inserir('4')">4</button>
+                    <button class="btn btn-numero" onclick="inserir('5')">5</button>
+                    <button class="btn btn-numero" onclick="inserir('6')">6</button>
+                    <button class="btn btn-operador" onclick="inserir('-')">−</button>
+                    
+                    <button class="btn btn-numero" onclick="inserir('1')">1</button>
+                    <button class="btn btn-numero" onclick="inserir('2')">2</button>
+                    <button class="btn btn-numero" onclick="inserir('3')">3</button>
+                    <button class="btn btn-operador" onclick="inserir('+')">+</button>
+                    
+                    <button class="btn btn-numero" onclick="inserir('0')">0</button>
+                    <button class="btn btn-numero" onclick="inserir('.')">.</button>
+                    <button class="btn btn-igual" onclick="calcular()">=</button>
+                    <button class="btn btn-backspace" onclick="apagarUltimo()">⌫</button>
+                </div>
             </div>
             
-            <div class="card-conta">
-                <p class="conta-destaque">(2 + 3) × 4</p>
-                <p>Primeiro parênteses: 2 + 3 = 5</p>
-                <p>Depois multiplicação: 5 × 4 = <span class="resultado-destaque">20</span></p>
-            </div>
-            
-            <div class="card-conta">
-                <p class="conta-destaque">15 ÷ 3 + 7</p>
-                <p>Primeiro divisão: 15 ÷ 3 = 5</p>
-                <p>Depois adição: 5 + 7 = <span class="resultado-destaque">12</span></p>
-            </div>
-            
-            <div class="card-conta">
-                <p class="conta-destaque">10 - 2 × 3</p>
-                <p>Primeiro multiplicação: 2 × 3 = 6</p>
-                <p>Depois subtração: 10 - 6 = <span class="resultado-destaque">4</span></p>
-            </div>
-            
-            <h3>🔧 Funcionalidades:</h3>
-            <ul class="lista-funcionalidades">
-                <li><span class="tecla">C</span> Limpa tudo (volta para 0)</li>
-                <li><span class="tecla">⌫</span> Apaga o último número</li>
-                <li><span class="tecla">( )</span> Altera a ordem dos cálculos</li>
-                <li><span class="tecla">.</span> Adiciona números decimais</li>
-            </ul>
-            
-            <div class="explicacao-texto">
-                <h3 style="margin-top: 0;">📝 Ordem das Operações</h3>
-                <p><strong>1º:</strong> Parênteses ( )</p>
-                <p><strong>2º:</strong> Multiplicação × e Divisão ÷</p>
-                <p><strong>3º:</strong> Adição + e Subtração -</p>
-                <p><em>Sempre resolva nesta ordem!</em></p>
-            </div>
-            
-            <div class="dica">
-                <h3 style="margin-top: 0; color: #f39c12;">💡 Dica Importante</h3>
-                <p>Use parênteses para forçar uma operação a ser feita primeiro. Exemplo:</p>
-                <p><strong>Sem parênteses:</strong> 8 ÷ 2 + 2 = 6</p>
-                <p><strong>Com parênteses:</strong> 8 ÷ (2 + 2) = 2</p>
+            <!-- EXPLICAÇÕES - LADO DIREITO -->
+            <div class="explicacoes">
+                <h2>📘 Aprenda Matemática</h2>
+                
+                <h3>📊 Exemplos de Contas:</h3>
+                
+                <div class="card-conta">
+                    <p class="conta-destaque">2 + 3 × 4</p>
+                    <p>Primeiro multiplicação: 3 × 4 = 12</p>
+                    <p>Depois adição: 2 + 12 = <span class="resultado-destaque">14</span></p>
+                </div>
+                
+                <div class="card-conta">
+                    <p class="conta-destaque">(2 + 3) × 4</p>
+                    <p>Primeiro parênteses: 2 + 3 = 5</p>
+                    <p>Depois multiplicação: 5 × 4 = <span class="resultado-destaque">20</span></p>
+                </div>
+                
+                <div class="card-conta">
+                    <p class="conta-destaque">15 ÷ 3 + 7</p>
+                    <p>Primeiro divisão: 15 ÷ 3 = 5</p>
+                    <p>Depois adição: 5 + 7 = <span class="resultado-destaque">12</span></p>
+                </div>
+                
+                <h3>🔧 Funcionalidades:</h3>
+                <ul class="lista-funcionalidades">
+                    <li><span class="tecla">C</span> Limpa tudo (volta para 0)</li>
+                    <li><span class="tecla">⌫</span> Apaga o último número</li>
+                    <li><span class="tecla">( )</span> Altera a ordem dos cálculos</li>
+                    <li><span class="tecla">.</span> Adiciona números decimais</li>
+                </ul>
+                
+                <div class="dica">
+                    <h3 style="margin-top: 0; color: #f39c12;">💡 Dica Importante</h3>
+                    <p><strong>Regra de Três Direta:</strong> Multiplica cruzado</p>
+                    <p><strong>Regra de Três Inversa:</strong> Multiplica reto</p>
+                    <p>Sempre identifique se as grandezas são diretas ou inversas!</p>
+                </div>
             </div>
         </div>
     </div>
@@ -327,21 +545,16 @@
         
         function calcular() {
             try {
-                // Substituir símbolos visuais pelos de cálculo
                 let expressao = display.innerText
                     .replace(/×/g, '*')
                     .replace(/÷/g, '/');
                 
-                // Verificar se a expressão é válida
                 if (expressao.includes('/0')) {
                     throw new Error('Divisão por zero');
                 }
                 
                 let resultado = eval(expressao);
-                
-                // Arredondar para evitar muitas casas decimais
                 resultado = Math.round(resultado * 1000000) / 1000000;
-                
                 display.innerText = resultado;
             } catch (error) {
                 display.innerText = 'Erro';
@@ -355,31 +568,19 @@
         document.addEventListener('keydown', function(event) {
             const tecla = event.key;
             
-            // Números
             if (!isNaN(tecla) && tecla !== ' ') {
                 inserir(tecla);
             }
             
-            // Operadores
             if (tecla === '+') inserir('+');
             if (tecla === '-') inserir('-');
             if (tecla === '*') inserir('*');
             if (tecla === '/') inserir('/');
-            
-            // Parênteses
             if (tecla === '(') inserir('(');
             if (tecla === ')') inserir(')');
-            
-            // Ponto decimal
             if (tecla === '.') inserir('.');
-            
-            // Enter para calcular
             if (tecla === 'Enter') calcular();
-            
-            // Backspace para apagar
             if (tecla === 'Backspace') apagarUltimo();
-            
-            // Escape para limpar tudo
             if (tecla === 'Escape') limparTudo();
         });
     </script>
